@@ -120,7 +120,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'chirper_api'
+    'chirper_api',
     'chirper_web'
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
