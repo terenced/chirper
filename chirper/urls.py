@@ -7,6 +7,7 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
 
     url(r'^$', include('chirper_web.urls')),
+    url(r'^api/$', include('chirper_api.urls')),
     # Examples:
     # url(r'^$', 'chirper.views.home', name='home'),
     # url(r'^chirper/', include('chirper.foo.urls')),
