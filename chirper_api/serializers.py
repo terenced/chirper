@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.utils.timesince import timesince
 import models
 
 
@@ -18,6 +19,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ChirpSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)
+    time_since_created = serializers.SerializerMethodField('get_time_since_created')
 
     class Meta:
         model = models.Chirp
+
+    def get_time_since_created(self, obj):
+        return timesince(obj.created_on)
