@@ -9,14 +9,25 @@ class UserList(generics.ListAPIView):
     model = models.User
     serializer_class = serializers.UserSerializer
 
+class UserDetails(generics.RetrieveAPIView):
+    model = models.User
+    serializer_class = serializers.UserSerializer
+    lookup_field = 'username'
+
+class UserProfile(generics.RetrieveAPIView):
+    model = models.UserProfile
+    serializer_class = serializers.UserProfileSerializer
+    lookup_field = "user.username"
+
+
 class ChirpsList(generics.ListAPIView):
     serializer_class = serializers.ChirpSerializer
-    user = models.User.objects.get(id=2)
-    queryset = models.Chirp.objects\
-                           .filter(Q(user__userprofile__in=user.profile.follows.all) | Q(user=user))\
+    user = models.User.objects.get(id=1)
+    queryset = models.Chirp.objects \
+                           .filter(Q(user=user)| Q(user__userprofile__in=user.profile.follows.all)) \
                            .order_by('-created_on')
 
 
 class ChirpsTimeline(generics.ListAPIView):
     serializer_class = serializers.ChirpSerializer
-    queryset = models.Chirp.objects.all()    
+    queryset = models.Chirp.objects.all()
