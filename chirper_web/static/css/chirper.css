@@ -1,0 +1,36 @@
+body,
+input,
+button,
+select,
+textarea,
+.navbar-search .search-query {
+   font-family: "Open Sans", Helvetica, Arial, sans-serif ! important;
+ }
+
+ body {
+    padding-top: 80px;
+ }
+
+ textarea {
+   resize: none;
+}
+
+.username {
+    font-size: 12px;
+    color: #999;
+}
+
+.chirp-length-countdown {
+    font-size: 19px;
+    margin-left: 10px;\
+}
+
+.chirp-content {
+    font-size: 16px;
+    margin: 0 5px 10px;
+}
+
+.time-ago {
+    font-size: 12px;
+    margin: -9 0 10px;
+}
