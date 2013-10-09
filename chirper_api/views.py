@@ -14,11 +14,6 @@ class UserDetails(generics.RetrieveAPIView):
     serializer_class = serializers.UserSerializer
     lookup_field = 'username'
 
-class UserProfile(generics.RetrieveAPIView):
-    model = models.UserProfile
-    serializer_class = serializers.UserProfileSerializer
-    lookup_field = "user.username"
-
 
 class ChirpsList(generics.ListAPIView):
     serializer_class = serializers.ChirpSerializer
