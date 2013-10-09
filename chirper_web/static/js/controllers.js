@@ -5,6 +5,8 @@ function ChirpTimelineCtl($scope, ChirpTimeline){
     ChirpTimeline.query(function(response){
         $scope.chirps = response;
     });
+}
 
+function CreateChirpCtl($scope) {
 
 }
