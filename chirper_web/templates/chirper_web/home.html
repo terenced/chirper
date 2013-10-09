@@ -1,5 +1,30 @@
-<html>
+<html ng-app='chirper'>
+<head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+    <script src="{{ STATIC_URL }}js/lib/jquery.cookie.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script src="http://code.angularjs.org/1.1.5/angular-resource.min.js"></script>
+    <script src="{{STATIC_URL}}js/app.js"></script>
+    <script src="{{STATIC_URL}}js/controllers.js"></script>
+    <script src="{{STATIC_URL}}js/services.js"></script>
+</head>
     <body>
+        {% load humanize %}
         <h1>Chirp Chirp</h1>
+        <div ng-controller="ChirpTimelineCtl" class="container">
+        {% verbatim %}
+         <ul>
+            <li ng-repeat="chirp in chirps">
+                {{ chirp.content }}, {{ chirp.time_since_created }}
+            </li>
+        </ul>
+        {% endverbatim %}
+        </div>
     </body>
 </html>
