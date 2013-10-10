@@ -8,7 +8,7 @@ user_urls = patterns('',
 )
 
 chirps_urls = patterns('',
-    url(r'^/timeline$', views.ChirpsList.as_view(), name='chirp-timeline'),
+    url(r'^$', views.ChirpsList.as_view(), name='chirp-list'),
 )
 
 urlpatterns = patterns('',
