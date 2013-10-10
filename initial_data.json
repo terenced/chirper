@@ -3,9 +3,9 @@
     "pk": 1,
     "model": "auth.user",
     "fields": {
-      "username": "terry",
-      "first_name": "",
-      "last_name": "",
+      "username": "terenced",
+      "first_name": "terry",
+      "last_name": "dellino",
       "is_active": true,
       "is_superuser": true,
       "is_staff": true,
