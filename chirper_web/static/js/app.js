@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('chirper', ['chirpTimelineService']).config(function($httpProvider) {
+angular.module('chirper', ['chirper.api']).config(function($httpProvider) {
     $httpProvider.defaults.headers.post  = {
         'X-CSRFToken': $.cookie('csrftoken'),
         'Content-Type': 'application/json'

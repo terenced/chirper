@@ -1,7 +1,15 @@
-angular.module('chirpTimelineService', ['ngResource']).
-    factory('ChirpTimeline', function($resource){
-        return $resource('/api/chirps/timeline', {}, {
-            query: {method:'GET', isArray:true}
-  });
+app = angular.module('chirper.api',['ngResource'])
 
-});
+app.factory('ChirpsService', function($resource){
+        return $resource('/api/chirps', {}, {
+            query: {method:'GET', isArray:true},
+            save: {method:'POST', isArray:false}
+        });
+    });
+
+
+app.factory('UsersService', function($resource){
+        return $resource('/api/users', {}, {
+            query: {method:'GET', isArray:true}
+        });
+    });

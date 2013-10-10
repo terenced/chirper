@@ -1,12 +1,26 @@
-function ChirpTimelineCtl($scope, ChirpTimeline){
+function ChirpTimelineCtl($scope, ChirpsService){
 
+    $scope.chirp = ""
     $scope.chirps = []
 
-    ChirpTimeline.query(function(response){
+    $scope.invalid = false
+
+    ChirpsService.query(function(response){
         $scope.chirps = response;
     });
-}
 
-function CreateChirpCtl($scope) {
+    $scope.change = function() {
+        $scope.invalid = ($scope.chirp.length > 140 || $scope.chirp.length < 1)
+        console.log($scope.invalid)
+    };
 
+
+    $scope.createChirp = function () {
+        var chirp = new ChirpsService();
+        chirp.content = $scope.chirp;
+        chirp.user_id = 1
+        chirp.$save(function(response){
+            $scope.chirps.push(response);
+        });
+    };
 }

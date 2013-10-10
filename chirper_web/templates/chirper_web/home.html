@@ -13,7 +13,7 @@
     <!-- Open Sans font-->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
-    <link rel="stylesheet" href="{{STATIC_URL}}/css/chirper.css">
+    <link rel="stylesheet" href="{{STATIC_URL}}css/chirper.css">
 
     <script src="{{ STATIC_URL }}js/lib/jquery.cookie.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
@@ -33,8 +33,7 @@
         {% verbatim %}
         <div class="container">
             <div class="row">
-
-                <div ng-controller="CreateChirpCtl" class="col-md-4">
+                <div ng-controller="ChirpTimelineCtl" class="col-md-4">
                     <textarea type='text'
                               cols="40" rows="6"
                               ng-model='chirp'
@@ -42,21 +41,20 @@
                               placeholder='Chirp something, you derp!'></textarea>
                     <br/>
                     <br/>
-
-                    <button class='btn btn-default' ng-click='createChirp()' >Chirp, Chirp</button>
+                    <button class='btn btn-default' ng-click='createChirp()' ng-disabled="invalid" >Chirp, Chirp</button>
                     <span class="chirp-length-countdown" ng-style="chirp.length > 140 && {'color': 'red'}">{{140 - chirp.length}}</span>
+                    <span>{{counter}} {{thing}}</span>
                 </div>
                 <div class="col-md-8">
                     <div ng-controller="ChirpTimelineCtl" class="container">
-
-                     <div class="class="list-group"">
-                        <li ng-repeat="chirp in chirps" class="list-group-item" >
-                            <h4>{{ chirp.user.first_name }} {{ chirp.user.last_name }} <span class="username">@{{ chirp.user.username }}</span></h4>
-                            <p class="chirp-content">{{ chirp.content }}</p>
-                            <p class="time-ago pull-right">{{ chirp.time_since_created }} ago</p>
-                        </li>
-                    </div>
-                    </div>
+                        <ul class="class="list-group"">
+                            <li ng-repeat="chirp in chirps" class="list-group-item">
+                                <h4>{{ chirp.user.first_name }} {{ chirp.user.last_name }} <span class="username">@{{ chirp.user.username }}</span></h4>
+                                <p class="chirp-content">{{ chirp.content }}</p>
+                                <p class="time-ago pull-right">{{ chirp.time_since_created }} ago</p>
+                            </li>
+                        </ul>
+                    </div><!-- container -->
                 </div>
             </div><!-- row -->
         </div><!--container -->
