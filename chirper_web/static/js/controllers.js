@@ -3,7 +3,7 @@ function ChirpTimelineCtl($scope, ChirpsService){
     $scope.chirp = ""
     $scope.chirps = []
 
-    $scope.invalid = false
+    $scope.invalid = true
 
     ChirpsService.query(function(response){
         $scope.chirps = response;
@@ -11,7 +11,6 @@ function ChirpTimelineCtl($scope, ChirpsService){
 
     $scope.change = function() {
         $scope.invalid = ($scope.chirp.length > 140 || $scope.chirp.length < 1)
-        console.log($scope.invalid)
     };
 
 
