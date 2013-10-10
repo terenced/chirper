@@ -7,7 +7,8 @@ from rest_framework.test import APIClient
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 
-from chirper_api.serializers import UserCreateSerializer
+from chirper_api.serializers import UserRegistrationSerializer
+import json
 
 
 class ApiTestCase(APITestCase):
@@ -42,3 +43,13 @@ class ApiTestCase(APITestCase):
         url = reverse('user-register')
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_get_token(self):
+        expected_token = Token.objects.get(user__username='horse')
+        url = reverse('auth-token')
+        data = {'username': u'horse','password': u'dev123'}
+
+        response = self.client.post(url, data)
+        actual_token = json.loads(response.content)["token"]
+        self.assertEqual(actual_token, expected_token.key)
+

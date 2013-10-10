@@ -15,6 +15,6 @@ chirps_urls = patterns('',
 urlpatterns = patterns('',
     url(r'^users', include(user_urls)),
     url(r'^chirps', include(chirps_urls)),
-    url(r'^api-token-auth', 'rest_framework.authtoken.views.obtain_auth_token'),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api-token-auth', 'rest_framework.authtoken.views.obtain_auth_token', name='auth-token'),
+    #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 )
