@@ -13,17 +13,22 @@ import json
 
 class ApiTestCase(APITestCase):
 
+    def __init__(self):
+        self.unauth_client = None
+        #super(ApiTestCase, self).__init__()
+        super().__init__()
+
     def setUp(self):
         token = Token.objects.get(user__username='horse')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        self.unauth_client = APIClient(enforce_csrf_checks=True)
 
     def test_should_fail_to_get_chirps_without_token(self):
         """
         Ensure we cannot get chirps unless we are authenticated
         """
-        unauth_client = APIClient()
         url = reverse('chirp-list')
-        response = unauth_client.get(url)
+        response = self.unauth_client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_should_chirps_with_token(self):
@@ -53,3 +58,11 @@ class ApiTestCase(APITestCase):
         actual_token = json.loads(response.content)["token"]
         self.assertEqual(actual_token, expected_token.key)
 
+    def test_should_access_auth_token_with_unauth_client(self):
+        expected_token = Token.objects.get(user__username='horse')
+        url = reverse('auth-token')
+        data = {'username': u'horse','password': u'dev123'}
+
+        response = self.unauth_client.post(url, data)
+        actual_token = json.loads(response.content)["token"]
+        self.assertEqual(actual_token, expected_token.key)
