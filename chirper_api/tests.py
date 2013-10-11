@@ -13,10 +13,9 @@ import json
 
 class ApiTestCase(APITestCase):
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super(ApiTestCase, self).__init__(*args, **kwargs)
         self.unauth_client = None
-        #super(ApiTestCase, self).__init__()
-        super().__init__()
 
     def setUp(self):
         token = Token.objects.get(user__username='horse')
@@ -45,22 +44,29 @@ class ApiTestCase(APITestCase):
         """
         data = {'username': u'jake','password': u'dev123'}
 
-        url = reverse('user-register')
+        url = reverse('register')
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_get_token(self):
+    def test_should_get_token_with_valid_creds(self):
         expected_token = Token.objects.get(user__username='horse')
-        url = reverse('auth-token')
+        url = reverse('token-auth')
         data = {'username': u'horse','password': u'dev123'}
 
         response = self.client.post(url, data)
         actual_token = json.loads(response.content)["token"]
         self.assertEqual(actual_token, expected_token.key)
 
+    def test_should_not_get_token_with_invalid_creds(self):
+        url = reverse('token-auth')
+        data = {'username': u'hacker','password': u'somepassword'}
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_should_access_auth_token_with_unauth_client(self):
         expected_token = Token.objects.get(user__username='horse')
-        url = reverse('auth-token')
+        url = reverse('token-auth')
         data = {'username': u'horse','password': u'dev123'}
 
         response = self.unauth_client.post(url, data)
