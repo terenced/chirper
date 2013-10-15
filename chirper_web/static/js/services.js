@@ -11,16 +11,15 @@ var app = angular.module('chirper.api', ['ngCookies', 'ngResource'])
 //         });
 //     });
 
-app.factory('ChirpsService', function($http, $cookieStore){
+app.factory('ChirpsService', function($http,$q, $cookieStore){
         return {
-            query: function() {
-                console.log($cookieStore.get('user').token)
-                $http.defaults.headers.post = { 'Authorization': 'Token ' + $cookieStore.get('user').token }
-                console.log($http.defaults.headers.post)
-                $http.get('/api/chirps').success(function(res){
-                    console.log(res);
-                    return res;
+            getChirps: function() {
+                var deferred = $q.defer();
+                $http.defaults.headers.get = { 'Authorization': 'Token ' + $cookieStore.get('user').token }
+                 var promise = $http.get('/api/chirps').success(function(response){
+                    deferred.resolve(response);
                 });
+                return deferred.promise; 
             }
         }
     });
@@ -37,13 +36,12 @@ app.factory('AuthService', function($http, $cookieStore) {
 
     function changeUser(u, t) {
         $cookieStore.remove('user');
-        var currentUser = { username: u, token: t };
+        currentUser = { username: u, token: t };
         $cookieStore.put('user', currentUser);
     };
 
     return {
         isLoggedIn: function() {
-            console.log(currentUser);
             return currentUser.token != ''
         },
 
@@ -56,7 +54,6 @@ app.factory('AuthService', function($http, $cookieStore) {
         login: function(user, success, error) {
             console.log(user);
             $http.post('/api/token-auth', user).success(function(res){
-                console.log(res)
                 changeUser(user.username, res.token);
                 success({ username: user.username, token: res.token });
             }).error(error);

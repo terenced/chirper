@@ -9,12 +9,17 @@ app.config(function($httpProvider) {
 });
 
 
-app.directive('hideIfLoginRequired', function() {
+app.directive('hideIfLoginRequired', ['AuthService', function(AuthService) {
   return {
     restrict: 'A',
     link: function($scope,elem,attrs) {
-
-       elem.hide();
+      
+      if(AuthService.isLoggedIn()){
+        elem.show();
+      }
+      else {
+        elem.hide();
+      }
 
       $scope.$on('auth-loginRequired', function() {
         elem.hide();
@@ -26,14 +31,19 @@ app.directive('hideIfLoginRequired', function() {
 
     }
   }
-});
+}]);
 
-app.directive('showIfLoginRequired', function() {
+app.directive('showIfLoginRequired', ['AuthService', function(AuthService) {
   return {
     restrict: 'A',
     link: function($scope,elem,attrs) {
 
-      elem.hide();
+      if(AuthService.isLoggedIn()){
+        elem.hide();
+      }
+      else {
+        elem.show();
+      }
 
       $scope.$on('auth-loginRequired', function() {
         elem.show();
@@ -45,4 +55,4 @@ app.directive('showIfLoginRequired', function() {
 
     }
   }
-});
+}]);

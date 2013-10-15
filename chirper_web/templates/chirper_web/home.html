@@ -33,17 +33,17 @@
         <div id="login-holder" class="container" show-if-login-required>
             <div ng-controller="LoginController" ng-init="init()">
                 <form novalidate>
-                    Username: <input type="text" ng-model="username" /><br />
-                    Password: <input type="text" ng-model="password" /><br />
+                    Username: <input type="text" ng-model="username" value="horse"/><br />
+                    Password: <input type="text" ng-model="password" value="dev123"/><br />
                     <button class='btn btn-default' ng-click="submit()">go!</button>
                     <p>{{ isLoggedIn }}</p>
                 </form>
             </div>
         </div>
 
-        <div id="content" class="container" hide-if-login-required>
+        <div id="content" class="container" ng-controller="ContentController" ng-init="init()" hide-if-login-required>
             <div class="row">
-                <div ng-controller="ContentController" class="col-md-4">
+                <div class="col-md-4">
                     <textarea type='text'
                               cols="40" rows="6"
                               ng-model='chirp'
@@ -55,7 +55,7 @@
                     <span class="chirp-length-countdown" ng-style="chirp.length > 140 && {'color': 'red'}">{{140 - chirp.length}}</span>
                 </div>
                 <div class="col-md-8">
-                    <div ng-controller="ContentController" class="container">
+                    <div class="container">
                         <ul class="class="list-group"">
                             <li ng-repeat="chirp in chirps" class="list-group-item">
                                 <h4>{{ chirp.user.first_name }} {{ chirp.user.last_name }} <span class="username">@{{ chirp.user.username }}</span></h4>
