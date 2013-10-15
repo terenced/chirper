@@ -20,6 +20,13 @@ app.factory('ChirpsService', function($http,$q, $cookieStore){
                     deferred.resolve(response);
                 });
                 return deferred.promise; 
+            },
+
+            create: function(chirp){
+                data = {'chirp': chirp}
+                console.log(data)
+                $http.defaults.headers.post = { 'Authorization': 'Token ' + $cookieStore.get('user').token, 'Content-Type': 'application/json'  }
+                return $http.post('/api/chirps/create', data)
             }
         }
     });

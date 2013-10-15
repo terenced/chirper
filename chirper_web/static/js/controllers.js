@@ -21,12 +21,12 @@ angular.module('chirper-app').controller({
         };
 
         $scope.createChirp = function () {
-            var chirp = new ChirpsService();
-            chirp.content = $scope.chirp;
-            chirp.user_id = 1
-            chirp.$save(function(response){
-                $scope.chirps.push(response);
-            });
+
+            res = ChirpsService.create($scope.chirp);
+            console.log(res)
+            // chirp.$save(function(response){
+            //     $scope.chirps.push(response);
+            // });
         };
     }
 });
