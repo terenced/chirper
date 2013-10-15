@@ -26,9 +26,31 @@ def register_user(request):
         token = Token.objects.get(user__username = user.username)
         return Response({'token': token.key}, status=status.HTTP_201_CREATED)
     except Exception, e:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def create_chirp(request):
+    
+    try:
+        print request.POST
+        print request.POST['chirp']
+        chirp = models.Chirp()
+        token = get_token(request.META)
+        user = models.User.objects.get(auth_token__key = token)
+        chirp.content = request.POST['chirp']
+        chirp.user = user
+        chirp.save()
+
+        return Response('', status=status.HTTP_201_CREATED)
+    except Exception, e:
         print e
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+def get_token(meta):
+    if meta.has_key('HTTP_AUTHORIZATION'):
+        return meta['HTTP_AUTHORIZATION'].split(' ')[1]
+    else:
+        return ''
 
 class UserRegistration(generics.CreateAPIView):
     permission_classes = (AllowAny,)

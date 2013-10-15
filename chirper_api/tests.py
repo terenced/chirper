@@ -72,3 +72,10 @@ class ApiTestCase(APITestCase):
         response = self.unauth_client.post(url, data)
         actual_token = json.loads(response.content)["token"]
         self.assertEqual(actual_token, expected_token.key)
+
+    def test_should_create_chirp_belonging_to_authenticated_user(self):
+        url = reverse('create-chirp')
+        data = {'chirp': 'Hello, world!'}
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
