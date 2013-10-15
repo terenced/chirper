@@ -8,24 +8,41 @@ app.config(function($httpProvider) {
     };
 });
 
-app.directive('login-required', function() {
-    return {
-      restrict: 'C',
-      link: function(scope, elem, attrs) {
-        var login = elem.find('#login-holder');
-        var main = elem.find('#content');
-        
-        login.hide();
-        
-        scope.$on('event:auth-loginRequired', function() {
-          login.slideDown('slow', function() {
-            main.hide();
-          });
-        });
-        scope.$on('event:auth-loginConfirmed', function() {
-          main.show();
-          login.slideUp();
-        });
-      }
+
+app.directive('hideIfLoginRequired', function() {
+  return {
+    restrict: 'A',
+    link: function($scope,elem,attrs) {
+
+       elem.hide();
+
+      $scope.$on('auth-loginRequired', function() {
+        elem.hide();
+      });
+
+      $scope.$on('auth-loginConfirmed', function() {
+        elem.show();
+      });
+
     }
+  }
+});
+
+app.directive('showIfLoginRequired', function() {
+  return {
+    restrict: 'A',
+    link: function($scope,elem,attrs) {
+
+      elem.hide();
+
+      $scope.$on('auth-loginRequired', function() {
+        elem.show();
+      });
+
+      $scope.$on('auth-loginConfirmed', function() {
+        elem.hide();
+      });
+
+    }
+  }
 });

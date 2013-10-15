@@ -1,12 +1,29 @@
 var app = angular.module('chirper.api', ['ngCookies', 'ngResource'])
 
-app.factory('ChirpsService', function($resource){
-        return $resource('/api/chirps', {}, {
-            query: {method:'GET', isArray:true},
-            save: {method:'POST', isArray:false}
-        });
-    });
+// app.factory('ChirpsService', function($resource, $cookieStore){
+//         return $resource('/api/chirps', {}, {
+//             query: {
+//                 method:'GET',
+//                 isArray:true,
+//                 headers:{ 'Authorization': 'Token ' + $cookieStore.get('user').token }
+//             },
+//             save: {method:'POST', isArray:false}
+//         });
+//     });
 
+app.factory('ChirpsService', function($http, $cookieStore){
+        return {
+            query: function() {
+                console.log($cookieStore.get('user').token)
+                $http.defaults.headers.post = { 'Authorization': 'Token ' + $cookieStore.get('user').token }
+                console.log($http.defaults.headers.post)
+                $http.get('/api/chirps').success(function(res){
+                    console.log(res);
+                    return res;
+                });
+            }
+        }
+    });
 
 app.factory('UsersService', function($resource){
         return $resource('/api/users', {}, {
@@ -29,6 +46,7 @@ app.factory('AuthService', function($http, $cookieStore) {
             console.log(currentUser);
             return currentUser.token != ''
         },
+
         register: function(user, success, error) {
             $http.post('/api/register', user).success(function(res) {
                 changeUser(res);
@@ -43,17 +61,10 @@ app.factory('AuthService', function($http, $cookieStore) {
                 success({ username: user.username, token: res.token });
             }).error(error);
         },
-        logout: function(success, error) {
+        clear: function(success, error) {
             changeUser('', '');
-            // $http.post('/logout').success(function(){
-            //     changeUser({
-            //         username: '',
-            //         role: userRoles.public
-            //     });
-            //     success();
-            // }).error(error);
         },
-        
+
         user: currentUser
     };
 });

@@ -30,7 +30,7 @@
             </div>
         </nav>
         {% verbatim %}
-        <div  id="login-holder" class="container">
+        <div id="login-holder" class="container" show-if-login-required>
             <div ng-controller="LoginController" ng-init="init()">
                 <form novalidate>
                     Username: <input type="text" ng-model="username" /><br />
@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <div id="content" class="container">
+        <div id="content" class="container" hide-if-login-required>
             <div class="row">
                 <div ng-controller="ContentController" class="col-md-4">
                     <textarea type='text'

@@ -7,12 +7,16 @@ angular.module('chirper-app').controller({
 
         $scope.invalid = true
 
-        ChirpsService.query(function(response){
-            $scope.chirps = response;
-        });
+        // ChirpsService.query(function(response){
+        //     $scope.chirps = response;
+        // });
 
         $scope.change = function() {
             $scope.invalid = ($scope.chirp.length > 140 || $scope.chirp.length < 1)
+
+            ChirpsService.query(function(response){
+                $scope.$apply($scope.chirps = response);
+            });
         };
 
 
@@ -28,21 +32,28 @@ angular.module('chirper-app').controller({
 });
 
 angular.module('chirper-app').controller({
-    LoginController: function ($scope, $http, AuthService) {
+    LoginController: function ($scope, $http, AuthService, $rootScope) {
 
         $scope.isLoggedIn = false;
-        $scope.init = function () {
-            AuthService.logout()
-            console.log("init");
-            $scope.isLoggedIn = AuthService.isLoggedIn();
-            console.log("init");
-        }
-        
 
-        // $scope.isLoggedIn = function() {
-        //     console.log("checking");
-        //     AuthService.isLoggedIn();
-        // }
+        $scope.update = function() {
+            $scope.isLoggedIn = AuthService.isLoggedIn();
+
+            if($scope.isLoggedIn) {
+                console.log('auth-loginConfirmed');
+                $rootScope.$broadcast('auth-loginConfirmed');
+            }
+            else {
+                console.log('auth-loginRequired');
+                $rootScope.$broadcast('auth-loginRequired');
+            }
+        }
+
+        $scope.init = function () {
+            AuthService.clear();
+            $scope.update();
+        }
+
         $scope.submit = function() {
             AuthService.login({
                 username: $scope.username,
@@ -51,12 +62,12 @@ angular.module('chirper-app').controller({
             function(res) {
                 console.log(res);
                 $scope.isLoggedIn = true;
-                //alert(res);
+                $scope.update();
             },
             function(err) {
                 console.log(err);
                 $scope.isLoggedIn = false;
-                //alert(res);
+                $scope.update();
             });
         }
     }
