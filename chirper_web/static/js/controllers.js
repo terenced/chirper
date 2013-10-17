@@ -21,12 +21,7 @@ angular.module('chirper-app').controller({
         };
 
         $scope.createChirp = function () {
-
             res = ChirpsService.create($scope.chirp);
-            console.log(res)
-            // chirp.$save(function(response){
-            //     $scope.chirps.push(response);
-            // });
         };
     }
 });

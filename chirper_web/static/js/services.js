@@ -1,16 +1,5 @@
 var app = angular.module('chirper.api', ['ngCookies', 'ngResource'])
 
-// app.factory('ChirpsService', function($resource, $cookieStore){
-//         return $resource('/api/chirps', {}, {
-//             query: {
-//                 method:'GET',
-//                 isArray:true,
-//                 headers:{ 'Authorization': 'Token ' + $cookieStore.get('user').token }
-//             },
-//             save: {method:'POST', isArray:false}
-//         });
-//     });
-
 app.factory('ChirpsService', function($http,$q, $cookieStore){
         return {
             getChirps: function() {
@@ -29,13 +18,13 @@ app.factory('ChirpsService', function($http,$q, $cookieStore){
                 return $http.post('/api/chirps/create', data)
             }
         }
-    });
+});
 
 app.factory('UsersService', function($resource){
         return $resource('/api/users', {}, {
             query: {method:'GET', isArray:true}
         });
-    });
+});
 
 app.factory('AuthService', function($http, $cookieStore) {
 
