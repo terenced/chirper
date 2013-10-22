@@ -2,6 +2,7 @@ from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from rest_framework.decorators import permission_classes
 from rest_framework.authtoken.models import Token
 from django.db.models import Q
 
@@ -10,11 +11,12 @@ import serializers
 import models
 
 @api_view(['POST'])
+@permission_classes((AllowAny, ))
 def register_user(request):
     user = models.User()
     try:
         user.username = request.DATA["username"]
-        user.password = request.DATA["password"]
+        user.set_password(request.DATA["password"])
 
         if request.DATA.has_key("first_name"):
             user.first_name = request.DATA["first_name"]
@@ -23,6 +25,7 @@ def register_user(request):
             request.DATA["last_name"]
 
         user.save()
+
         token = Token.objects.get(user__username = user.username)
         return Response({'token': token.key}, status=status.HTTP_201_CREATED)
     except Exception, e:
@@ -41,7 +44,6 @@ def create_chirp(request):
 
         return Response('', status=status.HTTP_201_CREATED)
     except Exception, e:
-        print e
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class UserRegistration(generics.CreateAPIView):
@@ -49,7 +51,6 @@ class UserRegistration(generics.CreateAPIView):
 
     model = models.User
     serializer_class = serializers.UserRegistrationSerializer
-
 
 class UserList(generics.ListCreateAPIView):
     model = models.User
@@ -89,7 +90,7 @@ class ChirpsList(generics.ListAPIView):
     serializer_class = serializers.ChirpSerializer
 
     def get_queryset(self):
-        user = models.User.objects.get(id=1)#self.request.user
+        user = models.User.objects.get(username = self.request.user)
         return models.Chirp.objects \
                           .filter(Q(user=user)| Q(user__userprofile__in=user.profile.follows.all)) \
                           .order_by('-created_on')

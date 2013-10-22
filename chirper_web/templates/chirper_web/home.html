@@ -4,10 +4,12 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"> -->
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
     <!-- Open Sans font-->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
 
     <link rel="stylesheet" href="{{STATIC_URL}}css/chirper.css">
 
@@ -22,34 +24,51 @@
 
 </head>
     <body>
+        {% verbatim %}
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand">Chirper <small class="tiny-text">(Kinda like Twitter)</small></a>
-                </div>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Chirper <small class="tiny-text">(Kinda like Twitter)</small></a>
+              <div class="collapse navbar-collapse navbar-ex1-collapse" ng-controller="LoginController" ng-init="init()">
+                <ul class="nav navbar-nav pull-right" show-if-login-required>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Register <b class="caret"></b></a>
+                        <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+                            <form novalidate>
+                                <p><input type="text" ng-model="register_username" placeholder="Username" /></p>
+                                <p><input type="text" ng-model="register_first_name" placeholder="First name" /></p>
+                                <p><input type="text" ng-model="register_last_name" placeholder="Last name" /></p>
+                                <p><input type="text" ng-model="register_password" placeholder="Password" /></p>
+                                <p><button class='btn btn-primary' ng-click="register_user()">Register</button></p>
+                            </form>
+                        </div>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign-in <b class="caret"></b></a>
+                        <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+                            <form novalidate>
+                                <p><input type="text" ng-model="username" placeholder="Username" /></p>
+                                <p><input type="text" ng-model="password" placeholder="Password" /></p>
+                                <p><button class='btn btn-primary' ng-click="login()">Sign In!</button></p>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav pull-right" hide-if-login-required>
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user['username']}} <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#" ng-click='logout()'>Sign Out</a></li>
+                    </ul>
+                  </li>
+                </ul>
             </div>
         </nav>
-        {% verbatim %}
-        <div id="login-holder" class="container" show-if-login-required>
-            <div class="row" ng-controller="LoginController" ng-init="init()">
-                <div class="col-md-2">
-                    <form novalidate>
-                        <p><input type="text" ng-model="username" placeholder="Username" /></p>
-                        <p><input type="text" ng-model="password" placeholder="Password" /></p>
-                        <p><button class='btn btn-primary' ng-click="submit()">Sign in!</button></p>
-                    </form>
-                </div>
-                <div class="auth-right col-md-2">
-                    <form novalidate>
-                        <p><input type="text" ng-model="username" placeholder="Username" /></p>
-                        <p><input type="text" ng-model="password" placeholder="First name" /></p>
-                        <p><input type="text" ng-model="password" placeholder="Last name" /></p>
-                        <p><input type="text" ng-model="password" placeholder="Password" /></p>
-                        <p><button class='btn btn-primary' ng-click="submit()">Register</button></p>
-                    </form>
-                </div>
-            </div>
-        </div>
 
         <div id="content" class="container" ng-controller="ContentController" ng-init="init()" hide-if-login-required>
             <div class="row">

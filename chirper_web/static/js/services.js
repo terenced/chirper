@@ -4,6 +4,7 @@ app.factory('ChirpsService', function($http,$q, $cookieStore){
         return {
             getChirps: function() {
                 var deferred = $q.defer();
+                console.log('requesting with ' + $cookieStore.get('user').username + ' ' + $cookieStore.get('user').token)
                 $http.defaults.headers.get = { 'Authorization': 'Token ' + $cookieStore.get('user').token }
                  var promise = $http.get('/api/chirps').success(function(response){
                     deferred.resolve(response);
@@ -13,7 +14,6 @@ app.factory('ChirpsService', function($http,$q, $cookieStore){
 
             create: function(chirp){
                 data = {'chirp': chirp}
-                console.log(data)
                 $http.defaults.headers.post = { 'Authorization': 'Token ' + $cookieStore.get('user').token, 'Content-Type': 'application/json'  }
                 return $http.post('/api/chirps/create', data)
             }
@@ -28,36 +28,52 @@ app.factory('UsersService', function($resource){
 
 app.factory('AuthService', function($http, $cookieStore) {
 
-    var currentUser = $cookieStore.get('user') || { username: '', token: '' };
+    var noUser = { username: '', token: '' }
+    var currentUser = null//$cookieStore.get('user') || noUser
 
     function changeUser(u, t) {
-        $cookieStore.remove('user');
+        console.log('changeUser')
+        console.log(u + ":" + t)
+        clearUser();
         currentUser = { username: u, token: t };
         $cookieStore.put('user', currentUser);
     };
 
+    function clearUser(){
+        console.log('cookieStore ' + $cookieStore)
+        $cookieStore.remove('user');
+        currentUser = noUser;
+    }
+
+
     return {
+        load: function(){
+            currentUser = $cookieStore.get('user') || noUser
+        },
+
         isLoggedIn: function() {
             return currentUser.token != ''
         },
 
         register: function(user, success, error) {
             $http.post('/api/register', user).success(function(res) {
-                changeUser(res);
+                changeUser(user.username, res.token);
                 success();
             }).error(error);
         },
         login: function(user, success, error) {
-            console.log(user);
             $http.post('/api/token-auth', user).success(function(res){
                 changeUser(user.username, res.token);
                 success({ username: user.username, token: res.token });
             }).error(error);
         },
-        clear: function(success, error) {
-            changeUser('', '');
+        logout: function(callback) {
+            clearUser();
+            callback();
         },
 
-        user: currentUser
+        getUser: function() {
+            return currentUser;
+        }
     };
 });
